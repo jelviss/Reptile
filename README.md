@@ -1,1 +1,1 @@
-#Some scrapy sprider
+trainTicketsSprider.py 自动定时抓取火车票余票的爬虫
