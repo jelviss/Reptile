@@ -15,9 +15,9 @@ class trainTicketsSprider:
     '''
     def getTicketsInfo(self, purpose_codes, queryDate,
                        from_station, to_station):
-        url = 'https://kyfw.12306.cn/otn/lcxxcx/query?purpose_codes=%s&queryDate=%s&from_station=%s&to_station=%s' %(
+        self.url = 'https://kyfw.12306.cn/otn/lcxxcx/query?purpose_codes=%s&queryDate=%s&from_station=%s&to_station=%s' %(
                purpose_codes, queryDate, from_station, to_station)
-        headers = {
+        self.headers = {
                     "Accept": "text/html,   \
                     application/xhtml+xml,  \
                     application/xml;",
@@ -27,13 +27,13 @@ class trainTicketsSprider:
                     AppleWebKit/537.36 (KHTML, like Gecko) \
                     Chrome/42.0.2311.90 Safari/537.36"
                   }
-        TicketSession = requests.Session()
-        TicketSession.verify = False  # 关闭https验证
-        TicketSession.headers = headers
+        self.TicketSession = requests.Session()
+        self.TicketSession.verify = False  # 关闭https验证
+        self.TicketSession.headers = self.headers
         try:
-            resp_json = TicketSession.get(url)
-            ticketsDatas = json.loads(resp_json.text)["data"]["datas"]
-            return ticketsDatas
+            self.resp_json = self.TicketSession.get(self.url)
+            self.ticketsDatas = json.loads(self.resp_json.text)["data"]["datas"]
+            return self.ticketsDatas
         except Exception, e:
             print e
 
@@ -44,17 +44,17 @@ class notify:
     '''
     def sendEmail(self, smtpserver, sender, receiver,
                   username, password, subject, content):
-        msg = MIMEText(content, 'html', 'utf8')
-        msg.set_charset('utf8')
-        msg['Subject'] = subject
-        msg['From'] = sender
-        msg['To'] = receiver
-        smtp = smtplib.SMTP()
-        smtp.connect(smtpserver)
-        # smtp.set_debuglevel(1)
-        smtp.login(username, password)
-        smtp.sendmail(sender, receiver, msg.as_string())
-        smtp.quit()
+        self.msg = MIMEText(content, 'html', 'utf8')
+        self.msg.set_charset('utf8')
+        self.msg['Subject'] = subject
+        self.msg['From'] = sender
+        self.msg['To'] = receiver
+        self.smtp = smtplib.SMTP()
+        self.smtp.connect(smtpserver)
+        # self.smtp.set_debuglevel(1)
+        self.smtp.login(username, password)
+        self.smtp.sendmail(sender, receiver, self.msg.as_string())
+        self.smtp.quit()
 
 
 def isZero(num):
