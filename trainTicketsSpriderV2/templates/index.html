@@ -1,0 +1,115 @@
+{% extends "bootstrap/base.html" %}
+{% block title %}火车票自动采集系统{% endblock %}
+{% block navbar %}
+<div class="navbar navbar-inverse" role="navigation">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">火车票信息定时采集系统</a>
+        </div>
+        <div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+                <li><a href="/">主页</a></li>
+                <li><a href="/rq">管理</a></li>
+            </ul>
+        </div>
+    </div>
+</div>
+{% endblock %}
+ 
+{% block content %}
+<!--
+<div class="container">
+    <div class="page-header">
+        <h1>Hello, {{ name }}!</h1>
+    </div>
+</div>
+-->
+<div class="container-fluid">
+    <div class="row">
+        <div class="span12">
+            <table class="table table-striped table-hover">
+                <thead>
+                    <tr>
+                        <th>
+                            邮箱
+                        </th>
+                        <th>
+                            出发站
+                        </th>
+                        <th>
+                            目的站
+                        </th>
+                        <th>
+                            日期
+                        </th>
+                        <th>
+                            间隔时间
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="">
+                        <td>
+                            1
+                        </td>
+                        <td>
+                            TB - Monthly
+                        </td>
+                        <td>
+                            01/04/2012
+                        </td>
+                        <td>
+                            Approved
+                        </td>
+                    </tr>
+                    <tr class="">
+                        <td>
+                            2
+                        </td>
+                        <td>
+                            TB - Monthly
+                        </td>
+                        <td>
+                            02/04/2012
+                        </td>
+                        <td>
+                            Declined
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="clearfix" style="margin-bottom: 10px;"></div><!-- 清除浮动 -->
+    <div class="row">
+            <form class="form-inline" action="/task" method="POST">
+                <div class="form-group">
+                    <label for="inputemail">邮箱</label>
+                        <input id="inputemail" name="email" class="form-control" type="text" placeholder="如:123456@qq.com"/>
+                    <label for="inputfromstation">出发站</label>
+                            <input id="inputfromstation" name="fromstation" class="form-control"type="text" placeholder="如:南昌"/>
+                    <label for="inputtostation">目的站</label>
+                            <input id="inputtostation" name="tostation" class="form-control"type="text" placeholder="如:武汉"/>
+                    <label for="inputdate">发车日期</label>
+                            <input id="inputdate" name="date" class="form-control"type="text" placeholder="如:2012-02-02"/>
+                    </div>
+                    <!--
+                    <label for="inputemail">间隔时间</label>
+                            <input name="relay" class="form-control"type="text" placeholder="默认单位是秒"/>
+                    -->
+                    <select class="form-control" name="ticketstype">
+                        <option value="0X00">学生票</option>
+                        <option value="ADULT">成人票</option>
+                        </select>
+                    <button class="btn btn-default" type="submit">提交</button>
+                </div>
+            </form>
+     </div>
+</div>
+{% endblock %}
