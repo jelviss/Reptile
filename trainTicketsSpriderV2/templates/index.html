@@ -46,42 +46,39 @@
                             目的站
                         </th>
                         <th>
-                            日期
+                            发车日期
                         </th>
                         <th>
                             间隔时间
                         </th>
+                        <th>
+                            发布日期
+                        </th>
                     </tr>
                 </thead>
                 <tbody>
+                {% for arg in args %}
                     <tr class="">
                         <td>
-                            1
+                            {{ arg['receiver'] }}
                         </td>
                         <td>
-                            TB - Monthly
+                            {{ arg['from_station'] }}
                         </td>
                         <td>
-                            01/04/2012
+                            {{ arg['to_station'] }}
                         </td>
                         <td>
-                            Approved
+                            {{ arg['queryDate'] }}
+                        </td>
+                        <td>
+                            1小时
+                        </td>
+                        <td>
+                            2012-02-02
                         </td>
                     </tr>
-                    <tr class="">
-                        <td>
-                            2
-                        </td>
-                        <td>
-                            TB - Monthly
-                        </td>
-                        <td>
-                            02/04/2012
-                        </td>
-                        <td>
-                            Declined
-                        </td>
-                    </tr>
+                {% endfor %}
                 </tbody>
             </table>
         </div>
