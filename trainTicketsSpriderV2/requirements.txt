@@ -4,3 +4,4 @@ requests
 redis
 flask
 flask-bootstrap
+supervisor

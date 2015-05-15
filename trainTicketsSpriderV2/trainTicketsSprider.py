@@ -60,7 +60,7 @@ class trainTicketsSprider:
 
        
 def isZero(num):
-    if num == '--' or '无':
+    if (num == '--') or (num == '无'):
         return '0'
     else:
         return num
