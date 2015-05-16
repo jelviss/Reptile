@@ -17,15 +17,14 @@ sys.setdefaultencoding('utf-8')
 app = Flask(__name__)
 parse = ConfigParser()
 parse.read('ttsprider.conf')
-
+r = Redis(host=parse.get("redis_db", "host"), port=parse.get("redis_db", "port"), db=parse.get("redis_db", "name"))
 Bootstrap(app)
 RQDashboard(app)
 
 
 @app.route("/")
 def index():
-    r = Redis(host="127.0.0.1", port=6379, db=0)
-    res = r.lrange('email_que_list', 0 , 14)
+    res = r.zrevrange('email_que_set_all', 0, 14)
     args = []
     for y in res:
         args.append(eval(y))   
@@ -44,10 +43,25 @@ def task():
         receiver = request.form.get('email')
         noticetime = request.form.get('noticetime')
         save_to_redis(receiver, to_station, from_station, querydate, purpose_codes, noticetime, publishtime)        
-
         '''将提交的信息立即加入rq队列'''
         append_que(getandsend, purpose_codes, querydate, from_station, to_station ,parse.get("email", "smtpserver"), parse.get("email", "sender"), receiver, parse.get("email", "username"), parse.get("email", "password"), parse.get("email", "subject"))
         return redirect('/')
+
+
+@app.route("/del", methods=['GET'])
+def del_email():
+    if request.method == 'GET':
+        if request.args.get('uid') and request.args.get('noticetime'):
+            uid = request.args.get('uid')
+            noticetime = request.args.get('noticetime')
+            del_quename = ['email_que_set_',noticetime]
+            #暂时这样
+            del_success_fromall = r.zremrangebyscore('email_que_set_all', int(uid)-1, int(uid)+1)
+            del_success_fromque = r.zremrangebyscore(''.join(del_quename), int(uid)-1,int(uid)+1)
+            if del_success_fromall and del_success_fromque:
+                return redirect('/')
+            else:
+                return 'fail'
 
 
 def append_que(func, purpose_codes, querydate, from_station, to_station, smtpserver, sender, receiver, username, password, subject):
@@ -60,10 +74,9 @@ def append_que(func, purpose_codes, querydate, from_station, to_station, smtpser
 
 def save_to_redis(receiver, to_station, from_station, querydate, purpose_codes, noticetime, publishtime):
     '''将需要抓取的信息存入redis'''
-    r = Redis(host="127.0.0.1", port=6379, db=0)
     uid = r.incr('uid')
     tickets_info = {'uid':uid, 'receiver':receiver, 'to_station':to_station, 'from_station':from_station, 'querydate':querydate, 'purpose_codes':purpose_codes, 'noticetime':noticetime, 'publishtime': publishtime}
-    r.lpush('email_que_list', str(tickets_info))
+    r.zadd('email_que_set_all', str(tickets_info), uid)
     if noticetime == '9am':
         r.zadd('email_que_set_9am', str(tickets_info), uid)
     elif noticetime == '11am':
@@ -76,4 +89,4 @@ def save_to_redis(receiver, to_station, from_station, querydate, purpose_codes, 
 
 
 if __name__ == "__main__":
-    app.run(host='127.0.0.1', port=9999)
+    app.run(debug=True, host='127.0.0.1', port=9999)

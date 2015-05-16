@@ -8,13 +8,13 @@ from ConfigParser import ConfigParser
 
 class pullinRQ:
     def __init__(self):
-        self.r = Redis(host="127.0.0.1", port=6379, db=0)
         self.parse = ConfigParser()
         self.parse.read('ttsprider.conf')
+        self.r = Redis(host=self.parse.get("redis_db", "host"), port=self.parse.get("redis_db", "port"), db=self.parse.get("redis_db", "name"))
 
     def append_rq_que(self, func, purpose_codes, querydate, from_station, to_station, smtpserver, sender, receiver, username, password, subject): 
-        q = Queue(connection=Redis()) 
-        result = q.enqueue( 
+        self.q = Queue(connection=Redis()) 
+        result = self.q.enqueue( 
           func, purpose_codes, querydate, from_station, to_station, smtpserver, sender, receiver, username, password, subject 
         )
 
