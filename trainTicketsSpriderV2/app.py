@@ -76,4 +76,4 @@ def save_to_redis(receiver, to_station, from_station, querydate, purpose_codes, 
 
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(host='127.0.0.1', port=9999)

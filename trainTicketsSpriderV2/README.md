@@ -20,4 +20,7 @@ TODO:定时循环采集
 
 利用crontab调度
 
-    0 10 * * * python ~/Reptile/trainTicktsSpriderV2/pullinRQ 10am
+	0 9 * * *  python ~/Reptile/trainTicketsSpriderV2/pullinRQ.py 9am
+	0 11 * * * python ~/Reptile/trainTicketsSpriderV2/pullinRQ.py 11am
+	0 15 * * * python ~/Reptile/trainTicketsSpriderV2/pullinRQ.py 3pm
+	0 17 * * * python ~/Reptile/trainTicketsSpriderV2/pullinRQ.py 5pm
