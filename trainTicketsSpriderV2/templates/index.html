@@ -49,7 +49,7 @@
                             发车日期
                         </th>
                         <th>
-                            间隔时间
+                            通知时间
                         </th>
                         <th>
                             发布日期
@@ -69,13 +69,13 @@
                             {{ arg['to_station'] }}
                         </td>
                         <td>
-                            {{ arg['queryDate'] }}
+                            {{ arg['querydate'] }}
                         </td>
                         <td>
-                            1小时
+                            {{ arg['noticetime'] }}
                         </td>
                         <td>
-                            2012-02-02
+                            {{ arg['publishtime'] }}
                         </td>
                     </tr>
                 {% endfor %}
@@ -96,14 +96,15 @@
                     <label for="inputdate">发车日期</label>
                             <input id="inputdate" name="date" class="form-control"type="text" placeholder="如:2012-02-02"/>
                     </div>
-                    <!--
-                    <label for="inputemail">间隔时间</label>
-                            <input name="relay" class="form-control"type="text" placeholder="默认单位是秒"/>
-                    -->
+                    <select class="form-control" name="noticetime">
+                        <option selected="selected">请选择通知时间</option>
+                        <option value="10am">上午一二节课之间</option>
+                        <option value="3pm">下午一二节课之间</option>
+                    </select>
                     <select class="form-control" name="ticketstype">
                         <option value="0X00">学生票</option>
                         <option value="ADULT">成人票</option>
-                        </select>
+                    </select>
                     <button class="btn btn-default" type="submit">提交</button>
                 </div>
             </form>
