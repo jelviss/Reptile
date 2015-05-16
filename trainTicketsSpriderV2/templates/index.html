@@ -85,7 +85,7 @@
                             {{ arg['publishtime'] }}
                         </td>
                     	<td>
-                            <a href="/del?uid={{ arg['uid'] }}&noticetime={{ arg['noticetime'] }}">删除</a>
+                            <a href="/del/{{ arg['uid'] }}/{{ arg['noticetime'] }}">删除</a>
                         </td>
 			</tr>
                 {% endfor %}

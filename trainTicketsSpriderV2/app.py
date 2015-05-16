@@ -48,20 +48,16 @@ def task():
         return redirect('/')
 
 
-@app.route("/del", methods=['GET'])
-def del_email():
-    if request.method == 'GET':
-        if request.args.get('uid') and request.args.get('noticetime'):
-            uid = request.args.get('uid')
-            noticetime = request.args.get('noticetime')
-            del_quename = ['email_que_set_',noticetime]
-            #暂时这样
-            del_success_fromall = r.zremrangebyscore('email_que_set_all', int(uid)-1, int(uid)+1)
-            del_success_fromque = r.zremrangebyscore(''.join(del_quename), int(uid)-1,int(uid)+1)
-            if del_success_fromall and del_success_fromque:
-                return redirect('/')
-            else:
-                return 'fail'
+@app.route("/del/<string:uid>/<string:noticetime>", methods=['GET'])
+def del_email(uid, noticetime):
+    del_quename = ['email_que_set_',noticetime]
+    #暂时这样
+    del_success_fromall = r.zremrangebyscore('email_que_set_all', int(uid)-1, int(uid)+1)
+    del_success_fromque = r.zremrangebyscore(''.join(del_quename), int(uid)-1,int(uid)+1)
+    if del_success_fromall and del_success_fromque:
+        return redirect('/')
+    else:
+        return 'fail'
 
 
 def append_que(func, purpose_codes, querydate, from_station, to_station, smtpserver, sender, receiver, username, password, subject):
