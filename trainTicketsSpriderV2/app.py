@@ -8,7 +8,6 @@ from rq_dashboard import RQDashboard
 from rq import Queue
 from redis import Redis
 import time
-from tornado import ioloop
 from trainTicketsSprider import getandsend
 import sys
 reload(sys)
