@@ -16,7 +16,7 @@ sys.setdefaultencoding('utf-8')
 
 app = Flask(__name__)
 parse = ConfigParser()
-parse.read('email.conf')
+parse.read('ttsprider.conf')
 
 Bootstrap(app)
 RQDashboard(app)

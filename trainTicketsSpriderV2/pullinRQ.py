@@ -10,7 +10,7 @@ class pullinRQ:
     def __init__(self):
         self.r = Redis(host="127.0.0.1", port=6379, db=0)
         self.parse = ConfigParser()
-        self.parse.read('email.conf')
+        self.parse.read('ttsprider.conf')
 
     def append_rq_que(self, func, purpose_codes, querydate, from_station, to_station, smtpserver, sender, receiver, username, password, subject): 
         q = Queue(connection=Redis()) 
