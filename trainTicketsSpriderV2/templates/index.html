@@ -95,16 +95,19 @@
                             <input id="inputtostation" name="tostation" class="form-control"type="text" placeholder="如:武汉"/>
                     <label for="inputdate">发车日期</label>
                             <input id="inputdate" name="date" class="form-control"type="text" placeholder="如:2012-02-02"/>
-                    </div>
                     <select class="form-control" name="noticetime">
-                        <option selected="selected">请选择通知时间</option>
-                        <option value="10am">上午一二节课之间</option>
-                        <option value="3pm">下午一二节课之间</option>
+                        <option selected="selected" disabled="true">请选择通知时间</option>
+                        <option value="9am">上午一二节课之间</option>
+                        <option value="11am">上午一二节课之间</option>
+                        <option value="3am">下午一二节课之间</option>
+                        <option value="5pm">下午三四节课之间</option>
+                        <option value="eachhour">每隔一小时</option>
                     </select>
                     <select class="form-control" name="ticketstype">
                         <option value="0X00">学生票</option>
                         <option value="ADULT">成人票</option>
                     </select>
+                    </div>
                     <button class="btn btn-default" type="submit">提交</button>
                 </div>
             </form>
