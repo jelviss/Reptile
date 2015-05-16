@@ -9,11 +9,15 @@ from rq import Queue
 from redis import Redis
 import time
 from trainTicketsSprider import getandsend
+from ConfigParser import ConfigParser
 import sys
 reload(sys)
 sys.setdefaultencoding('utf-8')
 
 app = Flask(__name__)
+parse = ConfigParser()
+parse.read('email.conf')
+
 Bootstrap(app)
 RQDashboard(app)
 
@@ -31,12 +35,7 @@ def index():
 @app.route("/task", methods=['POST'])
 def task():
     if request.method == 'POST':
-        sender = 'examole@163.com'
-        subject = u'火车票信息'
-        smtpserver = 'smtp.163.com'
-        username = 'example@163.com'
-        password = 'yourpassword'
-        '''获取参数'''
+        '''获取POST参数'''
         publishtime =  time.strftime('%Y-%m-%d %X', time.localtime(time.time()))
         purpose_codes = request.form.get('ticketstype')
         querydate = request.form.get('date')
@@ -45,8 +44,9 @@ def task():
         receiver = request.form.get('email')
         noticetime = request.form.get('noticetime')
         save_to_redis(receiver, to_station, from_station, querydate, purpose_codes, noticetime, publishtime)        
-        append_que(getandsend, purpose_codes, querydate, from_station, to_station ,smtpserver, sender, receiver,username, password, subject)
-        #return '票种:' + purpose_codes +'日期:' + querydate + '出发站:' + from_station + '目的站:' + to_station + '接受者:' + receiver
+
+        '''将提交的信息立即加入rq队列'''
+        append_que(getandsend, purpose_codes, querydate, from_station, to_station ,parse.get("email", "smtpserver"), parse.get("email", "sender"), receiver, parse.get("email", "username"), parse.get("email", "password"), parse.get("email", "subject"))
         return redirect('/')
 
 
@@ -59,15 +59,19 @@ def append_que(func, purpose_codes, querydate, from_station, to_station, smtpser
 
 
 def save_to_redis(receiver, to_station, from_station, querydate, purpose_codes, noticetime, publishtime):
-    '''将需要爬的信息存入redis'''
+    '''将需要抓取的信息存入redis'''
     r = Redis(host="127.0.0.1", port=6379, db=0)
     uid = r.incr('uid')
     tickets_info = {'uid':uid, 'receiver':receiver, 'to_station':to_station, 'from_station':from_station, 'querydate':querydate, 'purpose_codes':purpose_codes, 'noticetime':noticetime, 'publishtime': publishtime}
     r.lpush('email_que_list', str(tickets_info))
-    if noticetime == '10am':
-        r.zadd('email_que_set_10am', str(tickets_info), uid)
+    if noticetime == '9am':
+        r.zadd('email_que_set_9am', str(tickets_info), uid)
+    elif noticetime == '11am':
+        r.zadd('email_que_set_11am', str(tickets_info), uid)
     elif noticetime == '3pm':
         r.zadd('email_que_set_3pm', str(tickets_info), uid)
+    elif noticetime == '5pm':
+        r.zadd('email_que_set_5pm', str(tickets_info), uid)
     r.save()
 
 
