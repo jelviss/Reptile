@@ -32,11 +32,11 @@ def index():
 @app.route("/task", methods=['POST'])
 def task():
     if request.method == 'POST':
-        sender = 'hyqhyq2012123@163.com'
+        sender = 'examole@163.com'
         subject = u'火车票信息'
         smtpserver = 'smtp.163.com'
-        username = 'hyqhyq2012123@163.com'
-        password = 'basketbaqq'
+        username = 'example@163.com'
+        password = 'yourpassword'
         '''获取参数'''
         publishtime =  time.strftime('%Y-%m-%d %X', time.localtime(time.time()))
         purpose_codes = request.form.get('ticketstype')
