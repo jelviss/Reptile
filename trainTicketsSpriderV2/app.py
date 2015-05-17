@@ -4,6 +4,7 @@ from flask import request
 from flask import redirect
 from flask import render_template
 from flask.ext.bootstrap import Bootstrap
+from flask import flash
 from rq_dashboard import RQDashboard
 from rq import Queue
 from redis import Redis
@@ -16,6 +17,7 @@ reload(sys)
 sys.setdefaultencoding('utf-8')
 
 app = Flask(__name__)
+app.secret_key = 'rv6fc05ulvyqpcc='
 parse = ConfigParser()
 config_path = os.path.split(os.path.realpath(__file__))[0]
 config_file = os.path.join(config_path, 'ttsprider.conf')
@@ -48,6 +50,9 @@ def task():
         save_to_redis(receiver, to_station, from_station, querydate, purpose_codes, noticetime, publishtime)        
         '''将提交的信息立即加入rq队列'''
         append_que(getandsend, purpose_codes, querydate, from_station, to_station ,parse.get("email", "smtpserver"), parse.get("email", "sender"), receiver, parse.get("email", "username"), parse.get("email", "password"), parse.get("email", "subject"))
+        #TODO:判断提交是否成功
+        if True:
+            flash(u'提交成功')
         return redirect('/')
 
 
