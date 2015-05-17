@@ -17,8 +17,9 @@ sys.setdefaultencoding('utf-8')
 
 app = Flask(__name__)
 parse = ConfigParser()
-config_path = [os.path.split(os.path.realpath(__file__))[0], '/ttsprider.conf']
-parse.read(''.join(config_path))
+config_path = os.path.split(os.path.realpath(__file__))[0]
+config_file = os.path.join(config_path, 'ttsprider.conf')
+parse.read(config_file)
 r = Redis(host=parse.get("redis_db", "host"), port=parse.get("redis_db", "port"), db=parse.get("redis_db", "name"))
 Bootstrap(app)
 RQDashboard(app)
