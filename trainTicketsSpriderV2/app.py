@@ -51,12 +51,12 @@ def task():
         return redirect('/')
 
 
-@app.route("/del/<string:uid>/<string:noticetime>", methods=['GET'])
+@app.route("/del/<int:uid>/<string:noticetime>", methods=['GET'])
 def del_email(uid, noticetime):
     del_quename = ['email_que_set_',noticetime]
     #暂时这样
-    del_success_fromall = r.zremrangebyscore('email_que_set_all', int(uid)-1, int(uid)+1)
-    del_success_fromque = r.zremrangebyscore(''.join(del_quename), int(uid)-1,int(uid)+1)
+    del_success_fromall = r.zremrangebyscore('email_que_set_all', uid-1, uid)
+    del_success_fromque = r.zremrangebyscore(''.join(del_quename), uid-1, uid)
     if del_success_fromall and del_success_fromque:
         return redirect('/')
     else:
