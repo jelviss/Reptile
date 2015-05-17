@@ -5,29 +5,29 @@ TODO:定时循环采集
 
 #部署
 
-    pip install -r requirements.txt
+        python setup.py
 
 - 启动redis
 
-    redis-server
+        redis-server
 
 - 配置email.conf
 
 - 启动应用
 
-    supervisord -c ./supervisor.conf
+        supervisord -c ./supervisor.conf
 
 
-- 利用crontab调度
+- 利用crontab调度(假设项目在用户家目录下)
 
-    0 9 * * *  python ~/Reptile/trainTicketsSpriderV2/pullinRQ.py 9am
-    0 11 * * * python ~/Reptile/trainTicketsSpriderV2/pullinRQ.py 11am
-    0 15 * * * python ~/Reptile/trainTicketsSpriderV2/pullinRQ.py 3pm
-    0 17 * * * python ~/Reptile/trainTicketsSpriderV2/pullinRQ.py 5pm
+        0 9 * * *  ~/Reptile/trainTicketsSpriderV2/flask/bin/python ~/Reptile/trainTicketsSpriderV2/pullinRQ.py 9am
+        0 11 * * * ~/Reptile/trainTicketsSpriderV2/flask/bin/ ~/Reptile/trainTicketsSpriderV2/pullinRQ.py 11am
+        0 15 * * * ~/Reptile/trainTicketsSpriderV2/flask/bin/ ~/Reptile/trainTicketsSpriderV2/pullinRQ.py 3pm
+        0 17 * * * ~/Reptile/trainTicketsSpriderV2/flask/bin/ ~/Reptile/trainTicketsSpriderV2/pullinRQ.py 5pm
 
 - 控制服务
 
-	supervisorctl -c ./supervisor.conf start ttsprider
-	supervisorctl -c ./supervisor.conf stop ttsprider
+        supervisorctl -c ./supervisor.conf start ttsprider
+        supervisorctl -c ./supervisor.conf stop ttsprider
 
 访问http://locahost:9999
