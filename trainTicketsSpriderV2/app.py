@@ -11,12 +11,14 @@ import time
 from trainTicketsSprider import getandsend
 from ConfigParser import ConfigParser
 import sys
+import os
 reload(sys)
 sys.setdefaultencoding('utf-8')
 
 app = Flask(__name__)
 parse = ConfigParser()
-parse.read('ttsprider.conf')
+config_path = [os.path.split(os.path.realpath(__file__))[0], '/ttsprider.conf']
+parse.read(''.join(config_path))
 r = Redis(host=parse.get("redis_db", "host"), port=parse.get("redis_db", "port"), db=parse.get("redis_db", "name"))
 Bootstrap(app)
 RQDashboard(app)

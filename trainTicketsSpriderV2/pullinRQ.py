@@ -3,13 +3,15 @@
 from redis import Redis
 from rq import Queue
 import sys
+import os.path
 from trainTicketsSprider import getandsend
 from ConfigParser import ConfigParser
 
 class pullinRQ:
     def __init__(self):
         self.parse = ConfigParser()
-        self.parse.read('ttsprider.conf')
+        config_path = [os.path.split(os.path.realpath(__file__))[0], '/ttsprider.conf']
+        self.parse.read(''.join(config_path))
         self.r = Redis(host=self.parse.get("redis_db", "host"), port=self.parse.get("redis_db", "port"), db=self.parse.get("redis_db", "name"))
 
     def append_rq_que(self, func, purpose_codes, querydate, from_station, to_station, smtpserver, sender, receiver, username, password, subject): 
