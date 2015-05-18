@@ -1,4 +1,5 @@
 {% extends "bootstrap/base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
 {% block title %}火车票自动采集系统{% endblock %}
 {% block styles %}
 {{super()}}
@@ -100,33 +101,49 @@
         </div>
     </div>
     <div class="clearfix" style="margin-bottom: 10px;"></div><!-- 清除浮动 -->
-    <div class="row">
-            <form class="form-inline" action="/task" method="POST">
-                <div class="form-group">
-                    <label for="inputemail">邮箱</label>
-                        <input id="inputemail" name="email" class="form-control" type="text" placeholder="如:123456@qq.com"/>
-                    <label for="inputfromstation">出发站</label>
-                            <input id="inputfromstation" name="fromstation" class="form-control inputfromstation"type="text" placeholder="如:南昌"/>
-                    <label for="inputtostation">目的站</label>
-                            <input id="inputtostation" name="tostation" class="form-control inputtostation"type="text" placeholder="如:武汉"/>
-                    <label for="inputdate">发车日期</label>
-                            <input id="inputdate" name="date" class="form-control inputstartdate"type="text" placeholder="如:2012-02-02"/>
-                    <select class="form-control" name="noticetime">
-                        <option selected="selected" disabled="true">请选择通知时间</option>
-                        <option value="9am">上午一二节课之间</option>
-                        <option value="11am">上午一二节课之间</option>
-                        <option value="3am">下午一二节课之间</option>
-                        <option value="5pm">下午三四节课之间</option>
-                        <option value="eachhour">每隔一小时</option>
-                    </select>
-                    <select class="form-control" name="ticketstype">
-                        <option value="0X00">学生票</option>
-                        <option value="ADULT">成人票</option>
-                    </select>
-                    </div>
-                    <button class="btn btn-default" type="submit">提交</button>
+    <div class="row index_form">
+            <form class="form-inline" action="/" method="POST">
+            {{ form.hidden_tag() }}
+                <div class="form-group{% if form.email.errors %} has-error{% endif %}">
+                    {{form.email.label}}{{form.email(class='form-control',placeholder="如:123456@qq.com",required=required)}}
                 </div>
+                <div class="form-group{% if form.fromstation.errors %} has-error{% endif %}">
+                    {{form.fromstation.label}}{{form.fromstation(class='form-control inputfromstation',placeholder="如:南昌",required=required)}}
+                </div>
+                <div class="form-group{% if form.tostation.errors %} has-error{% endif %}">
+                    {{form.tostation.label}}{{form.tostation(class='form-control inputtostation',placeholder="如:武汉",required=required)}}
+                </div>
+                <div class="form-group{% if form.date.errors %} has-error{% endif %}">
+                    {{form.date.label}}{{form.date(class='form-control inputstartdate',placeholder="如:2012-02-02",required=required)}}
+                </div>
+                    {{form.noticetime.label}}{{form.noticetime(class='form-control',required=required)}}
+                    {{form.purposecode.label}}{{form.purposecode(class='form-control',required=required)}}
+                    {{form.submit(class='btn btn-default')}}
             </form>
      </div>
+    <div class="row error">
+            {% if form.email.errors %}
+                {% for error in form.email.errors %}  
+                   <p> {{error}}</p>
+                {% endfor %}
+            {% endif %}
+            {% if form.fromstation.errors %}
+                {% for error in form.fromstation.errors %}  
+                  <p>出发站格式不正确:<a href="http://localhost:9999/fm">{{error}}</a></p>
+                {% endfor %}
+            {% endif %}{% if form.tostation.errors %}
+                {% for error in form.tostation.errors %}  
+                  <p>目的站格式不正确:<a href="http://localhost:9999/fm">{{error}}</a></p>
+                {% endfor %}
+            {% endif %}{% if form.date.errors %}
+                {% for error in form.date.errors %}  
+                    <p>{{error}}<p>
+                {% endfor %}
+            {% endif %}
+
+
+
+    </div>
+
 </div>
 {% endblock %}

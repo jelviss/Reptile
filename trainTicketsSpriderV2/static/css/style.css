@@ -7,3 +7,9 @@
 .form-inline input.inputfromstation{
     width:200px;
 }
+.error{
+    color:red;
+}
+.index_form{
+    padding-bottom:10px;
+}
