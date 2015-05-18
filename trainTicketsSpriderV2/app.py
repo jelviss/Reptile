@@ -114,6 +114,11 @@ def del_email(uid, noticetime):
 def station_name():
     return render_template('station.json')
 
+
+@app.route("/login")
+def login():
+    return render_template('login.html')
+
 '''
 辅助函数
 '''
