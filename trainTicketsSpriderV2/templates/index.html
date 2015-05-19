@@ -80,10 +80,10 @@
                             {{ arg['receiver'] }}
                         </td>
                         <td>
-                            {{ arg['from_station'] }}
+                            {{ arg['from_station_name'] }}
                         </td>
                         <td>
-                            {{ arg['to_station'] }}
+                            {{ arg['to_station_name'] }}
                         </td>
                         <td>
                             {{ arg['querydate'] }}
@@ -132,11 +132,11 @@
             {% endif %}
             {% if form.fromstation.errors %}
                 {% for error in form.fromstation.errors %}  
-                  <p>出发站格式不正确:<a href="{{ url_for('static', filename='station.json') }}">{{error}}</a></p>
+                  <p>出发站格式不正确:{{error}}</p>
                 {% endfor %}
             {% endif %}{% if form.tostation.errors %}
                 {% for error in form.tostation.errors %}  
-                  <p>目的站格式不正确:<a href="{{ url_for('static', filename='station.json') }}">{{error}}</a></p>
+                  <p>目的站格式不正确:{{error}}</p>
                 {% endfor %}
             {% endif %}{% if form.date.errors %}
                 {% for error in form.date.errors %}  

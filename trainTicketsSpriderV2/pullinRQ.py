@@ -30,10 +30,10 @@ class pullinRQ:
         for args in reslist:
             purpose_code = args['purpose_code']
             querydate = args['querydate']
-            from_station = args['from_station']
-            to_station = args['to_station']
+            from_station_ab = args['from_station_ab']
+            to_station_ab = args['to_station_ab']
             receiver =  args['receiver']
-            self.append_rq_que(getandsend, purpose_code, querydate, from_station, to_station , self.parse.get("email", "smtpserver"), self.parse.get("email", "sender"), receiver, self.parse.get("email", "username"), self.parse.get("email", "password"), self.parse.get("email", "subject"))
+            self.append_rq_que(getandsend, purpose_code, querydate, from_station_ab, to_station_ab, self.parse.get("email", "smtpserver"), self.parse.get("email", "sender"), receiver, self.parse.get("email", "username"), self.parse.get("email", "password"), self.parse.get("email", "subject"))
 
 cron = pullinRQ()
 cron.getandpullin(sys.argv[1])

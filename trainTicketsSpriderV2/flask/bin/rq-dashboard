@@ -1,0 +1,9 @@
+#!/var/www/Reptile/trainTicketsSpriderV2/flask/bin/python
+# EASY-INSTALL-ENTRY-SCRIPT: 'rq-dashboard==0.3.4','console_scripts','rq-dashboard'
+__requires__ = 'rq-dashboard==0.3.4'
+import sys
+from pkg_resources import load_entry_point
+
+sys.exit(
+   load_entry_point('rq-dashboard==0.3.4', 'console_scripts', 'rq-dashboard')()
+)

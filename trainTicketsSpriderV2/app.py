@@ -16,8 +16,9 @@ import datetime
 from trainTicketsSprider import getandsend
 from ConfigParser import ConfigParser
 import sys
-import re
 import os
+from ttspriderInit import ttspriderInit
+import json
 reload(sys)
 sys.setdefaultencoding('utf-8')
 
@@ -36,8 +37,8 @@ RQDashboard(app)
 '''
 def station_validate(form, field):  
     '''表单tostation和tostation验证函数'''
-    if len(field.data) != 3:  
-        raise ValidationError(u'未完成') 
+    if not r.hget('stationname.to.ab', field.data):
+        raise ValidationError(u'木有这个站') 
 
 def date_validate(form, field):
     '''表单date验证函数'''
@@ -82,19 +83,20 @@ def index():
     if form.validate_on_submit():
         '''获取表单参数'''
         receiver = form.email.data
-        to_station = form.tostation.data
-        from_station = form.fromstation.data
+        to_station_name = form.tostation.data
+        to_station_ab = r.hget('stationname.to.ab', to_station_name).upper()
+        from_station_name = form.fromstation.data
+        from_station_ab = r.hget('stationname.to.ab', from_station_name).upper()
         querydate = form.date.data
         purpose_code = form.purposecode.data
         publishtime =  time.strftime('%Y-%m-%d %X', time.localtime(time.time()))
         noticetime = form.noticetime.data
-        save_to_redis(receiver, to_station, from_station, querydate, purpose_code, noticetime, publishtime)        
+        save_to_redis(receiver, to_station_ab, to_station_name, from_station_ab, from_station_name,
+                                querydate, purpose_code, noticetime, publishtime)        
         '''将提交的信息立即加入rq队列'''
-        append_que(getandsend, purpose_code, querydate, from_station, to_station ,parse.get("email", "smtpserver"), parse.get("email", "sender"), receiver, parse.get("email", "username"), parse.get("email", "password"), parse.get("email", "subject_dj"))
-        #TODO:判断提交是否成功
-        if True:
-            flash(u'提交成功')
-            return redirect('/')
+        append_que(getandsend, purpose_code, querydate, from_station_ab, to_station_ab,parse.get("email", "smtpserver"), parse.get("email", "sender"), receiver, parse.get("email", "username"), parse.get("email", "password"), parse.get("email", "subject_dj"))
+        flash(u'提交成功')
+        return redirect('/')
     return render_template('index.html', args=args, form=form)
 
 
@@ -130,10 +132,10 @@ def append_que(func, purpose_code, querydate, from_station, to_station, smtpserv
     )
 
 
-def save_to_redis(receiver, to_station, from_station, querydate, purpose_code, noticetime, publishtime):
+def save_to_redis(receiver, to_station_ab, to_station_name, from_station_ab, from_station_name, querydate, purpose_code, noticetime, publishtime):
     '''将需要抓取的信息存入redis'''
     uid = r.incr('uid')
-    tickets_info = {'uid':uid, 'receiver':receiver, 'to_station':to_station, 'from_station':from_station, 'querydate':querydate, 'purpose_code':purpose_code, 'noticetime':noticetime, 'publishtime': publishtime}
+    tickets_info = {'uid':uid, 'receiver':receiver, 'to_station_ab':to_station_ab, 'to_station_name':to_station_name, 'from_station_ab':from_station_ab,'from_station_name':from_station_name, 'querydate':querydate, 'purpose_code':purpose_code, 'noticetime':noticetime, 'publishtime': publishtime}
     r.zadd('email_que_set_all', str(tickets_info), uid)
     if noticetime == '9am':
         r.zadd('email_que_set_9am', str(tickets_info), uid)
@@ -147,4 +149,5 @@ def save_to_redis(receiver, to_station, from_station, querydate, purpose_code, n
 
 
 if __name__ == "__main__":
+    ttspriderInit.stationNameInit()
     app.run(debug=True, host='127.0.0.1', port=9999)

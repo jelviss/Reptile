@@ -1,0 +1,4 @@
+meld3 >= 0.6.5
+
+[iterparse]
+cElementTree >= 1.0.2
