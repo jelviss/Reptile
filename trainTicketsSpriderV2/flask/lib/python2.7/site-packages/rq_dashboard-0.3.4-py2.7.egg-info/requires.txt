@@ -1,5 +1,0 @@
-rq>=0.3.8
-Flask
-redis
-simplejson
-times

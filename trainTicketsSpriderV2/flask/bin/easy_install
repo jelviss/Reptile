@@ -1,9 +1,0 @@
-#!/var/www/Reptile/trainTicketsSpriderV2/flask/bin/python
-# EASY-INSTALL-ENTRY-SCRIPT: 'setuptools==16.0','console_scripts','easy_install'
-__requires__ = 'setuptools==16.0'
-import sys
-from pkg_resources import load_entry_point
-
-sys.exit(
-   load_entry_point('setuptools==16.0', 'console_scripts', 'easy_install')()
-)
