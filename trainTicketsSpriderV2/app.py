@@ -36,7 +36,7 @@ RQDashboard(app)
 '''
 def station_validate(form, field):  
     '''表单tostation和tostation验证函数'''
-    if len(field.data) > 3:  
+    if len(field.data) != 3:  
         raise ValidationError(u'未完成') 
 
 def date_validate(form, field):

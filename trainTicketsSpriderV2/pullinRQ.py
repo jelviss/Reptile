@@ -15,10 +15,10 @@ class pullinRQ:
         self.parse.read(config_file)
         self.r = Redis(host=self.parse.get("redis_db", "host"), port=self.parse.get("redis_db", "port"), db=self.parse.get("redis_db", "name"))
 
-    def append_rq_que(self, func, purpose_codes, querydate, from_station, to_station, smtpserver, sender, receiver, username, password, subject): 
+    def append_rq_que(self, func, purpose_code, querydate, from_station, to_station, smtpserver, sender, receiver, username, password, subject): 
         self.q = Queue(connection=Redis()) 
         result = self.q.enqueue( 
-          func, purpose_codes, querydate, from_station, to_station, smtpserver, sender, receiver, username, password, subject 
+          func, purpose_code, querydate, from_station, to_station, smtpserver, sender, receiver, username, password, subject 
         )
 
     def getandpullin(self,times):
@@ -28,12 +28,12 @@ class pullinRQ:
             reslist.append(eval(y))
 
         for args in reslist:
-            purpose_codes = args['purpose_codes']
+            purpose_code = args['purpose_code']
             querydate = args['querydate']
             from_station = args['from_station']
             to_station = args['to_station']
             receiver =  args['receiver']
-            self.append_rq_que(getandsend, purpose_codes, querydate, from_station, to_station , self.parse.get("email", "smtpserver"), self.parse.get("email", "sender"), receiver, self.parse.get("email", "username"), self.parse.get("email", "password"), self.parse.get("email", "subject"))
+            self.append_rq_que(getandsend, purpose_code, querydate, from_station, to_station , self.parse.get("email", "smtpserver"), self.parse.get("email", "sender"), receiver, self.parse.get("email", "username"), self.parse.get("email", "password"), self.parse.get("email", "subject"))
 
 cron = pullinRQ()
 cron.getandpullin(sys.argv[1])
