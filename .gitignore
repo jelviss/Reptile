@@ -42,4 +42,8 @@ Network Trash Folder
 Temporary Items
 .apdisk
 *.pyc
-trainTicketsSpriderV2/flask
+<<<<<<< HEAD
+trainTicketsSpriderV2/ttsprider/flask
+=======
+flask
+>>>>>>> refs/remotes/origin/master
