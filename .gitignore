@@ -43,7 +43,7 @@ Temporary Items
 .apdisk
 *.pyc
 <<<<<<< HEAD
-trainTicketsSpriderV2/ttsprider/flask
+trainTicketsSpriderV2/flask
 =======
 flask
 >>>>>>> refs/remotes/origin/master

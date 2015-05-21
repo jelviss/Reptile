@@ -23,7 +23,11 @@
                 <li><a href="/">你还在为上课而错过了火车票而烦恼吗</a></li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
-                <li><a href="/login">登录</a></li>
+                {% if current_user.is_authenticated() %}
+                    <li><a href="/logout">退出</a></li>
+                {% else %}
+                    <li><a href="/login">登录</a></li>
+                {% endif %}
             </ul>
         </div>
     </div>

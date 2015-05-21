@@ -34,3 +34,11 @@ TODO:定时循环采集
         /var/www/Reptile/trainTicketsSpriderV2/flask/bin/supervisorctl -c ./supervisor.conf stop ttsprider
 
 访问http://locahost:9999
+
+---
+
+#问题
+
+第一次运行会报错`pkg_resources.DistributionNotFound: meld3>=0.6.5`
+
+请再次运行setup.py

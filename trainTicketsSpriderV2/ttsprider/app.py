@@ -2,12 +2,16 @@
 from flask import Flask
 from flask import request
 from flask import redirect
-from flask import render_template
+from flask import render_template, url_for
 from flask.ext.wtf import Form
 from wtforms import TextField, StringField, validators, SubmitField, SelectField, DateTimeField
 from wtforms.validators import ValidationError
 from flask.ext.bootstrap import Bootstrap
 from flask import flash
+from flask.ext.login import (LoginManager, current_user, login_required,
+                            login_user, logout_user, UserMixin,
+                            confirm_login, fresh_login_required)
+import requests
 from rq_dashboard import RQDashboard
 from rq import Queue
 from redis import Redis
@@ -28,9 +32,17 @@ parse = ConfigParser()
 config_path = os.path.split(os.path.realpath(__file__))[0]
 config_file = os.path.join(config_path, 'ttsprider.conf')
 parse.read(config_file)
+
+login_manager = LoginManager()
+login_manager.setup_app(app)
+login_manager.login_view = "login"
+login_manager.login_message = u"请先登录"
+login_manager.refresh_view = "reauth"
+
 r = Redis(host=parse.get("redis_db", "host"), port=parse.get("redis_db", "port"), db=parse.get("redis_db", "name"))
 Bootstrap(app)
 RQDashboard(app)
+
 
 '''
 表单相关
@@ -42,6 +54,7 @@ def station_validate(form, field):
 
 def date_validate(form, field):
     '''表单date验证函数'''
+    #还存在一点问题
     date = field.data.split('-')
     try:
         y = int(date[0])
@@ -66,12 +79,15 @@ class indexSubmitForm(Form):
                                                )
     submit = SubmitField('提交')
 
-    
+class loginForm(Form):
+    stuid = TextField(u'学号', [validators.required()])
+    pwd = TextField(u'密码', [validators.required()])
+    submit = SubmitField('提交')
+   
 
 '''
 请求处理
 '''
-
 @app.route("/", methods=['GET','POST'])
 def index():
     res = r.zrevrange('email_que_set_all', 0, 14)
@@ -100,6 +116,7 @@ def index():
     return render_template('index.html', args=args, form=form)
 
 
+#删除登记信息
 @app.route("/del/<int:uid>/<string:noticetime>", methods=['GET'])
 def del_email(uid, noticetime):
     del_quename = ['email_que_set_',noticetime]
@@ -107,19 +124,82 @@ def del_email(uid, noticetime):
     del_success_fromall = r.zremrangebyscore('email_que_set_all', uid, uid)
     del_success_fromque = r.zremrangebyscore(''.join(del_quename), uid, uid)
     if del_success_fromall and del_success_fromque:
-        return redirect('/')
+        return redirect(url_for("index"))
     else:
         return 'fail'
 
 
+#返回车站名与缩写json
 @app.route("/fm")
 def station_name():
     return render_template('station.json')
 
 
-@app.route("/login")
+#需要登录访问的的后台
+@app.route("/manager")
+@login_required
+def manager():
+    pass
+
+
+#以下为登录处理函数
+class UserNotFoundError(Exception):
+    pass
+
+
+class User(UserMixin):
+    def __init__(self, id, pwd):
+        self.id = id
+        self.pwd = pwd
+        self.s = requests.Session()
+        self.data={"username":self.id,"password":self.pwd}
+        print self.data
+        self.res1 = self.s.post('http://user.ecjtu.net/login?redirect', data=self.data)
+        self.res2 = self.s.get("http://user.ecjtu.net/user")
+        try:
+            json.loads(self.res2.text)
+            self.isOk = False
+        except:
+            self.isOk = True
+
+    @classmethod
+    def get(self_class, id, pwd):
+        '''Return user instance of id, return None if not exist'''
+        try:
+            return self_class(id, pwd)
+        except UserNotFoundError:
+            return None
+
+
+@login_manager.user_loader
+def load_user(id):
+    return User.get(id, None)
+
+
+@app.route("/login", methods=["GET", "POST"])
 def login():
-    return render_template('login.html')
+    form = loginForm(request.form)
+    if form.validate_on_submit():
+        stuid = form.stuid.data
+        pwd = form.pwd.data
+        user = User.get(stuid, pwd)
+        if user and user.isOk == True:
+            login_user(user)
+            next = request.args.get('next')
+            flash(u"登录成功")
+            return redirect(request.args.get("next") or url_for("index"))
+        else:
+            flash(u'用户名或密码错误')
+            return redirect(url_for("login"))
+    return render_template("login.html", form=form)
+
+
+@app.route("/logout")
+@login_required
+def logout():
+    logout_user()
+    return redirect('/')
+
 
 '''
 辅助函数
