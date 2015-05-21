@@ -46,7 +46,7 @@
 <div class="row">
 <div class="col-md-4"></div>
 <div class="col-md-4">
-<form class="form" action="/" method="POST">
+<form class="form" action="/login" method="POST">
     {{ form.hidden_tag() }}
         <div class="form-group{% if form.stuid.errors %} has-error{% endif %}">
             {{form.stuid.label}}{{form.stuid(class='form-control inputfromstation',placeholder="请使用学号登录",required=required)}}
