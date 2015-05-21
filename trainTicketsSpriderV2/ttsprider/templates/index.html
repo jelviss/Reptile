@@ -72,9 +72,11 @@
                         <th>
                             发布日期
                         </th>
+                    {% if current_user.is_authenticated() %}
                          <th>
                             是否删除
                         </th>
+                    {% endif %}
  		    </tr>
                 </thead>
                 <tbody>
@@ -98,9 +100,11 @@
                         <td>
                             {{ arg['publishtime'] }}
                         </td>
+                        {% if current_user.is_authenticated() %}
                     	<td>
                             <a href="/del/{{ arg['uid'] }}/{{ arg['noticetime'] }}">删除</a>
                         </td>
+                        {% endif %}
 			</tr>
                 {% endfor %}
                 </tbody>
@@ -108,6 +112,7 @@
         </div>
     </div>
     <div class="clearfix" style="margin-bottom: 10px;"></div><!-- 清除浮动 -->
+    {% if current_user.is_authenticated() %}
     <div class="row index_form">
             <form class="form-inline" action="/" method="POST">
             {{ form.hidden_tag() }}
@@ -147,10 +152,7 @@
                     <p>{{error}}<p>
                 {% endfor %}
             {% endif %}
-
-
-
     </div>
-
+    {% endif %}
 </div>
 {% endblock %}

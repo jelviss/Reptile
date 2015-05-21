@@ -118,6 +118,7 @@ def index():
 
 #删除登记信息
 @app.route("/del/<int:uid>/<string:noticetime>", methods=['GET'])
+@login_required
 def del_email(uid, noticetime):
     del_quename = ['email_que_set_',noticetime]
     #暂时这样
