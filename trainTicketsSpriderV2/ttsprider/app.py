@@ -54,7 +54,6 @@ def station_validate(form, field):
 
 def date_validate(form, field):
     '''表单date验证函数'''
-    #还存在一点问题
     date = field.data.split('-')
     try:
         y = int(date[0])
@@ -103,7 +102,7 @@ def index():
         to_station_ab = r.hget('stationname.to.ab', to_station_name).upper()
         from_station_name = form.fromstation.data
         from_station_ab = r.hget('stationname.to.ab', from_station_name).upper()
-        querydate = form.date.data
+        querydate = '{0[0]}-{0[1]:0>2}-{0[2]:0>2}'.format(form.date.data.split('-'))
         purpose_code = form.purposecode.data
         publishtime =  time.strftime('%Y-%m-%d %X', time.localtime(time.time()))
         noticetime = form.noticetime.data
@@ -154,7 +153,6 @@ class User(UserMixin):
         self.pwd = pwd
         self.s = requests.Session()
         self.data={"username":self.id,"password":self.pwd}
-        print self.data
         self.res1 = self.s.post('http://user.ecjtu.net/login?redirect', data=self.data)
         self.res2 = self.s.get("http://user.ecjtu.net/user")
         try:

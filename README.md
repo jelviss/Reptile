@@ -1,8 +1,8 @@
 - trainTicketsSprider.py 
 
-  自动定时抓取火车票余票的爬虫
+  `一个用requests采集火车票的demo`
 
 
 - tranTicketsSpriderV2 
 
-  `TODO:实现可多邮箱定制的火车票信息定时采集通知系统`
+  多邮箱定制的火车票信息定时采集通知系统
