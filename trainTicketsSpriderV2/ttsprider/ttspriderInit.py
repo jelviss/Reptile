@@ -5,6 +5,7 @@ import sys
 from ConfigParser import ConfigParser
 from redis import Redis
 class ttspriderInit():
+    '''将车站中文名和缩写对应关系存入redis'''
     @staticmethod
     def stationNameInit():
         parse = ConfigParser()
