@@ -21,7 +21,7 @@ TODO:定时循环采集
         /var/www/Reptile/trainTicketsSpriderV2/flask/bin/supervisord -c ./supervisor.conf
 
 
-- 利用crontab调度(假设项目在用户家目录下)
+- 利用crontab调度
 
         0 9 * * *  /var/www/Reptile/trainTicketsSpriderV2/flask/bin/python /var/www/Reptile/trainTicketsSpriderV2/ttsprider/pullinRQ.py 9am
         0 11 * * * /var/www/Reptile/trainTicketsSpriderV2/flask/bin/python /var/www/Reptile/trainTicketsSpriderV2/ttsprider/pullinRQ.py 11am
