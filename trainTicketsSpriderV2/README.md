@@ -14,7 +14,7 @@ TODO:定时循环采集
 
         redis-server
 
-- 配置email.conf
+- 配置tttsprider/ttsprider.conf
 
 - 启动应用
 
