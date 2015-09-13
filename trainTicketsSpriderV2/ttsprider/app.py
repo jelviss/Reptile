@@ -229,4 +229,4 @@ def save_to_redis(receiver, to_station_ab, to_station_name, from_station_ab, fro
 
 if __name__ == "__main__":
     ttspriderInit.stationNameInit()
-    app.run(debug=True, host='127.0.0.1', port=9999)
+    app.run(debug=True, host='0.0.0.0', port=9999)

@@ -41,4 +41,4 @@ TODO:定时循环采集
 
 第一次运行会报错`pkg_resources.DistributionNotFound: meld3>=0.6.5`
 
-请再次运行setup.py
+将meld3升级到0.6.7
