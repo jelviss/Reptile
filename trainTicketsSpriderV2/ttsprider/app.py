@@ -4,7 +4,7 @@ from flask import request
 from flask import redirect
 from flask import render_template, url_for
 from flask.ext.wtf import Form
-from wtforms import TextField, StringField, validators, SubmitField, SelectField, DateTimeField
+from wtforms import TextField, StringField, validators, SubmitField, SelectField, DateTimeField, PasswordField
 from wtforms.validators import ValidationError
 from flask.ext.bootstrap import Bootstrap
 from flask import flash
@@ -80,7 +80,7 @@ class indexSubmitForm(Form):
 
 class loginForm(Form):
     stuid = TextField(u'学号', [validators.required()])
-    pwd = TextField(u'密码', [validators.required()])
+    pwd = PasswordField(u'密码', [validators.required()])
     submit = SubmitField('提交')
    
 
