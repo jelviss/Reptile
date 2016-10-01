@@ -19,7 +19,7 @@
         </div>
         <div class="navbar-collapse collapse">
             <ul class="nav navbar-nav navbar-right">
-		{% if current_user.is_authenticated %}
+        {% if current_user.is_authenticated %}
                     <li><a href="/logout">退出</a></li>
                 {% else %}
                     <li><a href="/login">登录</a></li>
@@ -73,7 +73,7 @@
                             是否删除
                         </th>
                     {% endif %}
- 		    </tr>
+            </tr>
                 </thead>
                 <tbody>
                 {% for arg in args %}
@@ -97,11 +97,11 @@
                             {{ arg['publishtime'] }}
                         </td>
                         {% if current_user.is_authenticated %}
-                    	<td>
+                        <td>
                             <a href="/del/{{ arg['uid'] }}/{{ arg['noticetime'] }}">删除</a>
                         </td>
                         {% endif %}
-			</tr>
+            </tr>
                 {% endfor %}
                 </tbody>
             </table>
