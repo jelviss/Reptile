@@ -12,7 +12,7 @@ from flask.ext.login import (LoginManager, current_user, login_required,
                             login_user, logout_user, UserMixin,
                             confirm_login, fresh_login_required)
 import requests
-from rq_dashboard import RQDashboard
+import rq_dashboard
 from rq import Queue
 from redis import Redis
 import time
@@ -41,8 +41,8 @@ login_manager.refresh_view = "reauth"
 
 r = Redis(host=parse.get("redis_db", "host"), port=parse.get("redis_db", "port"), db=parse.get("redis_db", "name"))
 Bootstrap(app)
-RQDashboard(app)
-
+app.config.from_object(rq_dashboard.default_settings)
+app.register_blueprint(rq_dashboard.blueprint)
 
 '''
 表单相关

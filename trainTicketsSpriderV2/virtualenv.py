@@ -1029,10 +1029,8 @@ def create_environment(home_dir, site_packages=False, clear=False,
                        prompt=None, search_dirs=None, never_download=False):
     """
     Creates a new environment in ``home_dir``.
-
     If ``site_packages`` is true, then the global ``site-packages/``
     directory will be on the path.
-
     If ``clear`` is true (default False) then the environment will
     first be cleared.
     """
@@ -1733,7 +1731,6 @@ def make_relative_path(source, dest, dest_is_directory=True):
     """
     Make a filename relative, where the filename is dest, and it is
     being referred to from the filename source.
-
         >>> make_relative_path('/usr/share/something/a-file.pth',
         ...                    '/usr/share/another-place/src/Directory')
         '../another-place/src/Directory'
@@ -1771,37 +1768,28 @@ def create_bootstrap_script(extra_text, python_version=''):
     """
     Creates a bootstrap script, which is like this script but with
     extend_parser, adjust_options, and after_install hooks.
-
     This returns a string that (written to disk of course) can be used
     as a bootstrap script with your own customizations.  The script
     will be the standard virtualenv.py script, with your extra text
     added (your extra text should be Python code).
-
     If you include these functions, they will be called:
-
     ``extend_parser(optparse_parser)``:
         You can add or remove options from the parser here.
-
     ``adjust_options(options, args)``:
         You can change options here, or change the args (if you accept
         different kinds of arguments, be sure you modify ``args`` so it is
         only ``[DEST_DIR]``).
-
     ``after_install(options, home_dir)``:
-
         After everything is installed, this function is called.  This
         is probably the function you are most likely to use.  An
         example would be::
-
             def after_install(options, home_dir):
                 subprocess.call([join(home_dir, 'bin', 'easy_install'),
                                  'MyPackage'])
                 subprocess.call([join(home_dir, 'bin', 'my-package-script'),
                                  'setup', home_dir])
-
         This example immediately installs a package, and runs a setup
         script from that package.
-
     If you provide something like ``python_version='2.4'`` then the
     script will start with ``#!/usr/bin/env python2.4`` instead of
     ``#!/usr/bin/env python``.  You can use this when the script must
