@@ -1,0 +1,63 @@
+{% extends "bootstrap/base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+{% block styles %}
+{{super()}}
+<link href="{{ url_for('static', filename='css/style.css') }}" rel="stylesheet" media="screen">
+{% endblock %}
+
+{% block navbar %}
+<div class="navbar navbar-inverse" role="navigation">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">火车票信息定时采集系统</a>
+        </div>
+        <div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+                <li><a href="http://www.ecjtu.net">主页</a></li>
+                <li><a href="/">你还在为上课而错过了火车票而烦恼吗</a></li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                {% if current_user.is_authenticated %} 
+                    <li><a href="/logout">退出</a></li> 
+                {% else %} 
+                    <li><a href="/login">登录</a></li> 
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block content %}
+{% with messages = get_flashed_messages() %}
+  {% if messages %}
+    {% for message in messages %}
+    <p class="text-center text-error">{{ message }}</p>
+    {% endfor %}
+  {% endif %}
+{% endwith %}
+<div class="clearfix" style="margin-bottom: 10px;"></div><!-- 清除浮动 -->
+<div class="container-fluid">
+<div class="row">
+<div class="col-md-4"></div>
+<div class="col-md-4">
+<form class="form" action="/login" method="POST">
+    {{ form.hidden_tag() }}
+        <div class="form-group{% if form.stuid.errors %} has-error{% endif %}">
+            {{form.stuid.label}}{{form.stuid(class='form-control inputfromstation',placeholder="请使用学号登录",required=required)}}
+        </div>
+        <div class="form-group{% if form.pwd.errors %} has-error{% endif %}">
+            {{form.pwd.label}}{{form.pwd(class='form-control inputtostation',placeholder="密码默认为你的身份证号后六位",required=required)}}
+        </div>
+            {{form.submit(class='btn btn-default')}}
+    </form>
+</div>
+<div class="col-md-4"></div>
+</div>
+</div>
+{% endblock %}
