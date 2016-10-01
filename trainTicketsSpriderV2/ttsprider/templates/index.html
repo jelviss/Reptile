@@ -18,10 +18,6 @@
             <a class="navbar-brand" href="/">火车票信息定时采集系统</a>
         </div>
         <div class="navbar-collapse collapse">
-            <ul class="nav navbar-nav">
-                <li><a href="http://www.ecjtu.net">主页</a></li>
-                <li><a href="/">你还在为上课而错过了火车票而烦恼吗</a></li>
-            </ul>
             <ul class="nav navbar-nav navbar-right">
 		{% if current_user.is_authenticated %}
                     <li><a href="/logout">退出</a></li>
@@ -100,7 +96,7 @@
                         <td>
                             {{ arg['publishtime'] }}
                         </td>
-                        {% if current_user.is_authenticated() %}
+                        {% if current_user.is_authenticated %}
                     	<td>
                             <a href="/del/{{ arg['uid'] }}/{{ arg['noticetime'] }}">删除</a>
                         </td>

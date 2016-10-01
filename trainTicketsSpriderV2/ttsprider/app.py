@@ -3,12 +3,12 @@ from flask import Flask
 from flask import request
 from flask import redirect
 from flask import render_template, url_for
-from flask.ext.wtf import Form
+from flask_wtf import FlaskForm
 from wtforms import TextField, StringField, validators, SubmitField, SelectField, DateTimeField, PasswordField
 from wtforms.validators import ValidationError
-from flask.ext.bootstrap import Bootstrap
+from flask_bootstrap import Bootstrap
 from flask import flash
-from flask.ext.login import (LoginManager, current_user, login_required,
+from flask_login import (LoginManager, current_user, login_required,
                             login_user, logout_user, UserMixin,
                             confirm_login, fresh_login_required)
 import requests
@@ -64,24 +64,24 @@ def date_validate(form, field):
         raise ValidationError(u'发车日期格式不正确。格式如:2012-02-02') 
 
 
-class indexSubmitForm(Form):
+class indexSubmitForm(FlaskForm):
     email = TextField(u'邮箱', [validators.Email(message=u"邮箱格式不正确"),validators.required()])
     fromstation = TextField(u'出发站', [station_validate, validators.required()])
     tostation = TextField(u'目的站', [station_validate, validators.required()])
     date = TextField(u'发车日期', [date_validate, validators.required()])
-    noticetime = SelectField(u'通知时间', choices=[('9am', u'上午一二节课之间'),
-                                                    ('11am', u'上午三四节课之间'),
-                                                    ('3pm', u'下午一二节课之间'),
-                                                    ('5pm', u'下午三四节课之间')],)
+    noticetime = SelectField(u'通知时间', choices=[('9am', u'9:00'),
+                                                    ('11am', u'11:00'),
+                                                    ('3pm', u'15:00'),
+                                                    ('5pm', u'17:00')])
     purposecode = SelectField(u'种类', choices=[('0X00', u'学生票'),
                                                ('ADULT', u'成人票')]
                                                )
     submit = SubmitField('提交')
 
-class loginForm(Form):
-    stuid = TextField(u'学号', [validators.required()])
+class loginForm(FlaskForm):
+    stuid = TextField(u'账号', [validators.required()])
     pwd = PasswordField(u'密码', [validators.required()])
-    submit = SubmitField('提交')
+    submit = SubmitField('登录')
    
 
 '''
@@ -152,14 +152,21 @@ class User(UserMixin):
         self.id = id
         self.pwd = pwd
         self.s = requests.Session()
+        '''
         self.data={"username":self.id,"password":self.pwd}
         self.res1 = self.s.post('http://user.ecjtu.net/login?redirect', data=self.data)
         self.res2 = self.s.get("http://user.ecjtu.net/user")
         try:
-            json.loads(self.res2.text)
+            #json.loads(self.res2.text)
             self.isOk = False
         except:
             self.isOk = True
+        '''
+        if self.id=='admin' and self.pwd=='admin':
+            self.isOk = True        
+        else:
+            self.isOK = False        
+        
 
     @classmethod
     def get(self_class, id, pwd):
@@ -182,7 +189,7 @@ def login():
         stuid = form.stuid.data
         pwd = form.pwd.data
         user = User.get(stuid, pwd)
-        if user and user.isOk == True:
+        if user.isOk == True:
             login_user(user)
             next = request.args.get('next')
             flash(u"登录成功")

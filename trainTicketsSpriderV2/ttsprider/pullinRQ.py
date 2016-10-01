@@ -8,7 +8,6 @@ from trainTicketsSprider import getandsend
 from ConfigParser import ConfigParser
 
 class pullinRQ:
-    '''crontab调用文件，用于将redis存储的需要采集的信息,加入rq队列进行采集'''
     def __init__(self):
         self.parse = ConfigParser()
         config_path = os.path.split(os.path.realpath(__file__))[0]

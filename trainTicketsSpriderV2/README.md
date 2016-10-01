@@ -1,6 +1,5 @@
 TODO:定时循环采集
 目前的方案是利用linux的crontab来实现定时调度任务。
-正在寻找更好的方法。
 
 
 #部署
@@ -20,7 +19,6 @@ TODO:定时循环采集
 
         /var/www/Reptile/trainTicketsSpriderV2/flask/bin/supervisord -c ./supervisor.conf
 
-
 - 利用crontab调度
 
         0 9 * * *  /var/www/Reptile/trainTicketsSpriderV2/flask/bin/python /var/www/Reptile/trainTicketsSpriderV2/ttsprider/pullinRQ.py 9am
@@ -33,7 +31,9 @@ TODO:定时循环采集
         /var/www/Reptile/trainTicketsSpriderV2/flask/bin/supervisorctl -c ./supervisor.conf start ttsprider
         /var/www/Reptile/trainTicketsSpriderV2/flask/bin/supervisorctl -c ./supervisor.conf stop ttsprider
 
-访问http://locahost:9999
+
+主页访问http://locahost:9999
+rq任务队列访问http://locahost:9181
 
 ---
 
@@ -41,4 +41,8 @@ TODO:定时循环采集
 
 第一次运行会报错`pkg_resources.DistributionNotFound: meld3>=0.6.5`
 
-将meld3升级到0.6.7
+解决方法:
+
+    找到supervisor-3.1.3-py2.6.egg-info/requires.txt，把文件里面meld3 >= 0.6.5注释掉
+
+        find / | grep requires.txt
