@@ -1,6 +1,6 @@
 -i http://pypi.douban.com/simple
 --trusted-host pypi.douban.com
-celery==3.1.24
+celery==5.2.2
 click==6.6
 dominate==2.2.1
 Flask==0.11.1
